@@ -12,6 +12,7 @@ C is pain. I am become pain
 #define WORD_LENGTH 21
 
 char word_list[NUM_WORDS][WORD_LENGTH];
+int wordcount = 0;
 
 int main(int argc, char *argv[]){
     /*
@@ -50,24 +51,29 @@ int main(int argc, char *argv[]){
     */
 
     char buffer[BUFFER_LENGTH];
-    char *buf_ptr = &buffer[0];
+    char *buf_ptr; 
     
     char word[WORD_LENGTH];
-    char *word_ptr = &word[0];
-
+    char *word_ptr;
+    
 	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) {
-        
-	    while(*buf_ptr != '\x0a'){
+        buf_ptr = buffer;
+        if(*buf_ptr != '\x0a'){
             *word_ptr = *buf_ptr;
             word_ptr++;
-            buf_ptr++;           
+            buf_ptr++;
         }
-        
-        printf(word);
-        printf("\n");
-        word_ptr = &word[0];
-
+        else{
+            wordlist[][]
+        }    
+         
     }
+    printf("%c", *buf_ptr);   
+    buf_ptr = buf_ptr+2;
+    printf( *buf_ptr);   
+    
+
+
         fclose(infile);
 	    fclose(outfile);	
 	    return 0;
