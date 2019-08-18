@@ -11,7 +11,7 @@ C is pain. I am become pain
 #define NUM_WORDS 120
 #define WORD_LENGTH 21
 
-char word_list[NUM_WORDS][WORD_LENGTH];
+char* wordlist[NUM_WORDS];
 int wordcount = 0;
 
 int main(int argc, char *argv[]){
@@ -53,26 +53,21 @@ int main(int argc, char *argv[]){
     char buffer[BUFFER_LENGTH];
     char *buf_ptr; 
     
-    char word[WORD_LENGTH];
-    char *word_ptr;
-    
-	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) {
-        buf_ptr = buffer;
-        if(*buf_ptr != '\x0a'){
-            *word_ptr = *buf_ptr;
-            word_ptr++;
-            buf_ptr++;
+	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) { //while !EOF
+        buf_ptr = strtok(buffer," ."); //tokenize string by delims
+        while(buf_ptr != NULL){        // while !end of buffer
+  //          printf("%s\n", buf_ptr);   //print token 
+            wordlist[wordcount] = buf_ptr;
+            wordcount++;
+            buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes from that location
         }
-        else{
-            wordlist[][]
-        }    
-         
+        
+     
     }
-    printf("%c", *buf_ptr);   
-    buf_ptr = buf_ptr+2;
-    printf( *buf_ptr);   
+    for(int i = 0; i < 10;i++){
+        printf( *(wordlist+i) );
     
-
+    }
 
         fclose(infile);
 	    fclose(outfile);	
