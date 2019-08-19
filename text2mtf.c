@@ -14,6 +14,8 @@ C is pain. I am become pain
 char* wordlist[NUM_WORDS];
 int wordcount = 0;
 
+void search( char * word);
+
 int main(int argc, char *argv[]){
     /*
         PART ONE: FILE I/O
@@ -56,8 +58,8 @@ int main(int argc, char *argv[]){
 	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) { //while !EOF
         buf_ptr = strtok(buffer," ."); //tokenize string by delims
         while(buf_ptr != NULL){        // while !end of buffer
-  //          printf("%s\n", buf_ptr);   //print token 
             wordlist[wordcount] = buf_ptr;
+            search(buf_ptr);
             wordcount++;
             buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes from that location
         }
@@ -66,7 +68,7 @@ int main(int argc, char *argv[]){
     }
     for(int i = 0; i < 10;i++){
         printf( *(wordlist+i) );
-    
+        printf("\n");
     }
 
         fclose(infile);
@@ -74,6 +76,18 @@ int main(int argc, char *argv[]){
 	    return 0;
 
 }
+// searches wordlist for current word to avoid duplicates
+void search(char* word){
+    for(int i = 0; i < wordcount; i ++){
+        if(word == wordlist[wordcount]){
+            printf(word);
+        }
+    }    
+}
+/*
+    if pointer to string a != pointer to string b
+
+*/
 
 
 
@@ -85,7 +99,3 @@ int main(int argc, char *argv[]){
 
 
 
-
-
-
-	 
