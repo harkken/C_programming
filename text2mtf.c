@@ -13,9 +13,9 @@ C is pain. I am become pain
 
 char* wordlist[NUM_WORDS];
 int wordcount = 0;
-
-void search( char * word);
-
+int location = 0;
+int search( char * word);
+void fix_wordlist(void);
 int main(int argc, char *argv[]){
     /*
         PART ONE: FILE I/O
@@ -58,44 +58,51 @@ int main(int argc, char *argv[]){
 	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) { //while !EOF
         buf_ptr = strtok(buffer," ."); //tokenize string by delims
         while(buf_ptr != NULL){        // while !end of buffer
-            wordlist[wordcount] = buf_ptr;
-            search(buf_ptr);
-            wordcount++;
+           if( search(buf_ptr) == 0){
+                
+                wordlist[wordcount] = buf_ptr;
+                wordcount++;
+                fprintf(outfile, "%c", (128+wordcount) );
+                fputs(buf_ptr, outfile); 
+                
+            }
+            // we found a match
+            else{
+                fprintf(outfile, "%c", (128+location) );
+           
+            }
+            
+            } 
             buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes from that location
         }
         
      
     }
-    for(int i = 0; i < 10;i++){
-        printf( *(wordlist+i) );
-        printf("\n");
-    }
-
         fclose(infile);
 	    fclose(outfile);	
 	    return 0;
 
 }
 // searches wordlist for current word to avoid duplicates
-void search(char* word){
+int search(char* word){
     for(int i = 0; i < wordcount; i ++){
-        if(word == wordlist[wordcount]){
-            printf(word);
+        if(strncmp(word, *(wordlist + i), 20) == 0){
+            //
+            location = wordcount - i;
+            fix_wordlist();
+            return 1;
+             
         }
-    }    
+    }
+    return 0;    
 }
-/*
-    if pointer to string a != pointer to string b
 
-*/
-
-
-
-
-
-
-
-
-
+void fix_wordlist(){
+    char * temp = wordlist[wordcount-location];
+    for(int i = (wordcount - location); i < (wordcount-1);i++){
+        wordlist[i] = wordlist[i+1]; 
+    }   
+    wordlist[wordcount-1] = temp;
+}
 
 
