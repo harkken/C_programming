@@ -11,7 +11,7 @@ C is pain. I am become pain
 #define NUM_WORDS 120
 #define WORD_LENGTH 21
 
-char* wordlist[NUM_WORDS];
+char wordlist[NUM_WORDS][20];
 int wordcount = 0;
 int location = 0;
 int search( char * word);
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
         buf_ptr = strtok(buffer," ."); //tokenize string by delims
         while(buf_ptr != NULL){        // while !end of buffer
            if( search(buf_ptr) == 0){
-                
+               //what do we do here 
                 wordlist[wordcount] = buf_ptr;
                 wordcount++;
                 fprintf(outfile, "%c", (128+wordcount) );
@@ -70,18 +70,19 @@ int main(int argc, char *argv[]){
             else{
                 fprintf(outfile, "%c", (128+location) );
            
-            }
+          
             
-            } 
-            buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes from that location
-        }
-        
+        } 
+            	buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes from that location
+  
+   		}		
      
-    }
+
         fclose(infile);
 	    fclose(outfile);	
 	    return 0;
 
+}
 }
 // searches wordlist for current word to avoid duplicates
 int search(char* word){
@@ -105,4 +106,7 @@ void fix_wordlist(){
     wordlist[wordcount-1] = temp;
 }
 
+/*
+two dimensional array time
 
+*/
