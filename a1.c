@@ -59,22 +59,18 @@ int main(int argc, char *argv[]){
     char *buf_ptr; 
    /*
 	Document how this function works for future reference.
-	Need to make sure that placing a null pointer will not break the functionality here
+	note: I was trying to implement some stupid functionality for awhile.
+	If you have the lingering feeling that what you're doing is not a good
+	approach, then save yourself the pain and find a better way.
 
 	*/
 	while(fgets(buffer, sizeof(char) * BUFFER_LENGTH, infile) ) { //while !EOF
-        buf_ptr = strtok(buffer," ."); //tokenize string by delims
+        buf_ptr = strtok(buffer," .\n"); //tokenize string by delims
 				
         while(buf_ptr != NULL){        // while !end of line?
-		   printf( "--->%s<---", buf_ptr);
-		   test_for_newline(buf_ptr);
-		/*
-		   if(*buf_ptr == '\n'){
-				fputc(10, outfile);
-				break;
-	    	}
-		*/ 	  
-           if( search(buf_ptr) == 0 && flag == 0){
+	//	printf("%s\n", buf_ptr);
+		    
+           if( search(buf_ptr) == 0 ){ // return 0 means its a unique word and should be copied into the list
                 strncpy(wordlist[wordcount], buf_ptr, 20);
                 wordcount++;
                 fprintf(outfile, "%c", (128+wordcount) );
@@ -87,13 +83,15 @@ int main(int argc, char *argv[]){
                 fprintf(outfile, "%c", (128+location) );      
             	
         	}
-		    test_flag(outfile);	  
+		   
 						 
-           	buf_ptr = strtok(NULL, " ."); //places a null terminator and tokenizes the rest of the line from that location
+           	buf_ptr = strtok(NULL, " .\n"); //places a null terminator and tokenizes the rest of the line from that location
   
    		
 		}
-	}	
+		fputc(10, outfile);
+	}
+		
 		// ------------------FOR LOOP TO PRINT OUT FINAL WORD LIST
 		for(int i = 0; i < wordcount;i++){
 			printf("%s", wordlist[i]);
@@ -108,47 +106,26 @@ int main(int argc, char *argv[]){
 }
 // searches wordlist for current word to avoid duplicates
 int search(char* word){
-    for(int i = 0; i < wordcount; i ++){
+    for(int i = 0; i < wordcount; i++){
         if(strncmp(word, *(wordlist + i), 20) == 0){
-            location = wordcount - i;
+            //location = wordcount - i;
+			location = wordcount - i - 1;
             fix_wordlist();
-            return 1;
+            return 1; //word is found
              
         }
     }
     return 0;    
 }
-
+// fix_wordlist() more like fix() this function
+/*
+something is wrong in this general area but i am too tired to fix it right now
+*/
 void fix_wordlist(){
     char * temp = wordlist[wordcount-location];
-    for(int i = (wordcount - location); i < (wordcount-1);i++){
-        strncpy(wordlist[i], wordlist[i+1], 20); 
+    for(int i = (wordcount - location); i < (wordcount);i++){
+        strncpy(wordlist[i], wordlist[i], 20); 
     }   
-    strncpy(wordlist[wordcount-1], temp, 20);
-}
-
-void test_for_newline(char *ptr){
-	//may need to copy the pointer into a local variable but it should work
-	//also might be able to find a fancy way to test the last character but for now will just loop char by char
-	char * ptr2;
-	ptr2 = ptr;	
-	while(ptr2 != NULL && *ptr2 != 10){
-		if(*ptr2 == '\n'){
-			*ptr2 = 10;
-		//	*ptr2++;
-			flag = 1;
-			break;
-		}
-		ptr2++;
-		
-	}
+    strncpy(wordlist[wordcount], temp, 20);
 	
-}
-void test_flag(FILE *output){
-	if(flag == 1){
-		fputc(10, output);
-		flag = 0;				
-	}
-
-
 }
