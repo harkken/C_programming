@@ -14,11 +14,10 @@ C is pain. I am become pain
 char wordlist[NUM_WORDS][20];
 int wordcount = 0;
 int location = 0;
+int word_location = 0;
 int flag = 0;
 int search( char * word);
-void fix_wordlist(void);
-void test_for_newline(char * ptr);
-void test_flag(FILE* output);
+void move_to_front(void);
 int main(int argc, char *argv[]){
     /*
         PART ONE: FILE I/O
@@ -93,10 +92,11 @@ int main(int argc, char *argv[]){
 	}
 		
 		// ------------------FOR LOOP TO PRINT OUT FINAL WORD LIST
+		/*
 		for(int i = 0; i < wordcount;i++){
 			printf("%s", wordlist[i]);
 		}
-
+	*/
 	
         fclose(infile);
 	    fclose(outfile);	
@@ -108,24 +108,42 @@ int main(int argc, char *argv[]){
 int search(char* word){
     for(int i = 0; i < wordcount; i++){
         if(strncmp(word, *(wordlist + i), 20) == 0){
-            //location = wordcount - i;
-			location = wordcount - i - 1;
-            fix_wordlist();
+            location = wordcount - i;
+			word_location = i; 
+            move_to_front();
             return 1; //word is found
              
         }
     }
     return 0;    
 }
-// fix_wordlist() more like fix() this function
+
 /*
 something is wrong in this general area but i am too tired to fix it right now
-*/
-void fix_wordlist(){
-    char * temp = wordlist[wordcount-location];
+
+void move_to_front(){
+    char * temp = wordlist[wordcount-location]; // 4 - 1 = 3
     for(int i = (wordcount - location); i < (wordcount);i++){
         strncpy(wordlist[i], wordlist[i], 20); 
     }   
-    strncpy(wordlist[wordcount], temp, 20);
+    strncpy(wordlist[wordcount-1], temp, 20);
 	
 }
+*/
+void move_to_front(){
+	//char * move_word = wordlist[location-1];
+	char move_word[20];
+	strncpy(move_word, wordlist[word_location], 20);
+	//printf("%s move word is \n", wordlist[word_location]);	
+	for( int  i = (wordcount-location); i < (wordcount-1); i++){
+		strncpy(wordlist[i], wordlist[i+1], 20);
+	}
+	strncpy(wordlist[wordcount-1], move_word, 20);	
+	//for(int i = 0; i < wordcount;i++){
+	//	printf("%s\n", wordlist[i]);
+	//}
+	//printf("\n");
+
+	
+}
+
